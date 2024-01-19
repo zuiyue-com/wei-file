@@ -24,6 +24,9 @@ pub fn xz_decompress(lzma_file_path: &str) -> Result<(), Box<dyn std::error::Err
     let lzma_file_name = path.file_name().ok_or("No file name")?.to_str().ok_or("Cannot convert to str")?.replace(".xz", "");
     let mut lzma_reader = BufReader::new(lzma_file);
 
+    // 获取file的文件名
+    let tar_file_name = lzma_file_name.clone().replace(".xz", "");
+
     // 创建一个新的 tar 文件
     let tar_file = File::create(lzma_file_dir.join(lzma_file_name))?;
     let mut tar_writer = BufWriter::new(tar_file);
@@ -31,8 +34,14 @@ pub fn xz_decompress(lzma_file_path: &str) -> Result<(), Box<dyn std::error::Err
     // 解压缩 lzma 文件到 tar 文件
     lzma_rs::xz_decompress(&mut lzma_reader, &mut tar_writer)?;
 
+    // 解压 tar 文件到 lzma_file_dir 目录
+    let tar_file = File::open(lzma_file_dir.join(tar_file_name))?;
+    let mut archive = tar::Archive::new(BufReader::new(tar_file));
+    archive.unpack(lzma_file_dir)?;
+
     Ok(())
 }
+
 
 pub fn xz_compress(tar_dir_path: &str) -> Result<(), Box<dyn std::error::Error>> {
     let tar_dir = Path::new(tar_dir_path);
