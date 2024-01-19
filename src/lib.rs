@@ -38,7 +38,6 @@ pub fn xz_decompress(lzma_file_path: &str) -> Result<(), Box<dyn std::error::Err
     let tar_file = File::open(lzma_file_dir.join(tar_file_name))?;
     let mut archive = tar::Archive::new(BufReader::new(tar_file));
     archive.unpack(lzma_file_dir)?;
-
     Ok(())
 }
 
