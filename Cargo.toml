@@ -10,3 +10,4 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 lzma-rs = "0.3.0"
+tar = "0.4"
