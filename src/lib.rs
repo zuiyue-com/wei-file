@@ -49,16 +49,16 @@ pub fn xz_compress(tar_dir_path: &str) -> Result<(), Box<dyn std::error::Error>>
     let tar_dir = tar_dir.file_name().ok_or("No file name")?.to_str().ok_or("Cannot convert to str")?;
 
     // 打开一个目录，使用wsl tar 并压缩目录下的所有文件
-    #[cfg(target_os = "windows")]
-    let data = std::process::Command::new("wsl")
-        .arg("tar")
-        .arg("-cJf")
-        .arg(format!("{}.tar.xz", tar_dir))
-        .arg(tar_dir)
-        .current_dir(tar_parent_dir)
-        .output().expect("failed to execute process");
+    // #[cfg(target_os = "windows")]
+    // let data = std::process::Command::new("tar")
+    //     .arg("tar")
+    //     .arg("-cJf")
+    //     .arg(format!("{}.tar.xz", tar_dir))
+    //     .arg(tar_dir)
+    //     .current_dir(tar_parent_dir)
+    //     .output().expect("failed to execute process");
 
-    #[cfg(target_os = "linux")]
+    // #[cfg(target_os = "linux")]
     let data = std::process::Command::new("tar")
         .arg("-cJf")
         .arg(format!("{}.tar.xz", tar_dir))
