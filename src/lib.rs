@@ -48,9 +48,10 @@ pub fn xz_compress(tar_dir_path: &str) -> Result<(), Box<dyn std::error::Error>>
     // 我要分解这个 tar_dir_path 的目录，如何分解？
     let tar_dir = tar_dir.file_name().ok_or("No file name")?.to_str().ok_or("Cannot convert to str")?;
 
-    // 打开一个目录，使用wsl tar 并压缩目录下的所有文件
+    // 打开一个目录，使用powershell tar 并压缩目录下的所有文件
     #[cfg(target_os = "windows")]
-    let data = std::process::Command::new("wsl")
+    let data = std::process::Command::new("powershell")
+        .arg("-Command")
         .arg("tar")
         .arg("-cJf")
         .arg(format!("{}.tar.xz", tar_dir))
